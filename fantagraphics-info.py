@@ -2,8 +2,8 @@ import argparse
 
 from intspan import intspan
 
+from barks_fantagraphics.comic_book import get_abbrev_jpg_page_list, get_safe_title
 from barks_fantagraphics.comics_database import ComicsDatabase, get_default_comics_database_dir
-from barks_fantagraphics.comics_utils import get_abbrev_jpg_page_list
 
 COMICS_DATABASE_DIR_ARG = "--comics-database-dir"
 VOLUME_ARG = "--volume"
@@ -42,4 +42,7 @@ max_len = max([len(title) for title in titles])
 
 for title in titles:
     comic_book = comics_database.get_comic_book(title)
-    print(f'Title: "{title:<{max_len}}", jpgs: {", ".join(get_abbrev_jpg_page_list(comic_book))}')
+    issue_title = get_safe_title(comic_book.get_comic_issue_title())
+    print(
+        f'Title: "{title:<{max_len}}", {issue_title}, jpgs: {", ".join(get_abbrev_jpg_page_list(comic_book))}'
+    )

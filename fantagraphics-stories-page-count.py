@@ -3,7 +3,7 @@ import argparse
 from intspan import intspan
 
 from barks_fantagraphics.comics_database import ComicsDatabase, get_default_comics_database_dir
-from barks_fantagraphics.comics_utils import get_jpg_page_list
+from barks_fantagraphics.comic_book import get_jpg_page_list
 
 COMICS_DATABASE_DIR_ARG = "--comics-database-dir"
 VOLUME_ARG = "--volume"
