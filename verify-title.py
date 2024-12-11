@@ -1,38 +1,19 @@
-import argparse
+import logging
+import sys
 
-from barks_fantagraphics.comics_database import ComicsDatabase, get_default_comics_database_dir
+from barks_fantagraphics.comics_cmd_args import CmdArgs, CmdArgNames
+from barks_fantagraphics.comics_utils import setup_logging
 
-COMICS_DATABASE_DIR_ARG = "--comics-database-dir"
-TITLE_ARG = "--title"
+setup_logging(logging.INFO)
 
+cmd_args = CmdArgs("Verify title", CmdArgNames.TITLE)
+args_ok, error_msg = cmd_args.args_are_valid()
+if not args_ok:
+    logging.error(error_msg)
+    sys.exit(1)
 
-def get_args():
-    parser = argparse.ArgumentParser(
-        #            prog="build-barks",
-        description="Verify Barks title."
-    )
-
-    parser.add_argument(
-        COMICS_DATABASE_DIR_ARG,
-        action="store",
-        type=str,
-        default=get_default_comics_database_dir(),
-    )
-    parser.add_argument(
-        TITLE_ARG,
-        action="store",
-        type=str,
-        required=True,
-    )
-
-    args = parser.parse_args()
-
-    return args
-
-
-cmd_args = get_args()
-comics_database = ComicsDatabase(cmd_args.comics_database_dir)
-title = cmd_args.title
+comics_database = cmd_args.get_comics_database()
+title = cmd_args.get_title()
 
 found, titles, close = comics_database.get_story_title_from_issue(title)
 if found:
@@ -43,7 +24,7 @@ elif close:
 else:
     found, close = comics_database.is_story_title(title)
     if found:
-        print(f'This is a valid title: "{title}.')
+        print(f'This is a valid title: "{title}".')
     elif close:
         print(f'"{title}" is not a valid title. Did you mean: "{close}".')
     else:

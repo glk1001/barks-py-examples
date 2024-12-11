@@ -1,29 +1,17 @@
-import argparse
+import logging
+import sys
 
-from barks_fantagraphics.comics_database import ComicsDatabase, get_default_comics_database_dir
+from barks_fantagraphics.comics_cmd_args import CmdArgs
+from barks_fantagraphics.comics_utils import setup_logging
 
-COMICS_DATABASE_DIR_ARG = "--comics-database-dir"
+setup_logging(logging.INFO)
 
+cmd_args = CmdArgs("Make required Fantagraphics directories.")
+args_ok, error_msg = cmd_args.args_are_valid()
+if not args_ok:
+    logging.error(error_msg)
+    sys.exit(1)
 
-def get_args():
-    parser = argparse.ArgumentParser(
-        #            prog="build-barks",
-        description="Create all required Fantagraphics directories."
-    )
-
-    parser.add_argument(
-        COMICS_DATABASE_DIR_ARG,
-        action="store",
-        type=str,
-        default=get_default_comics_database_dir(),
-    )
-
-    args = parser.parse_args()
-
-    return args
-
-
-cmd_args = get_args()
-comics_database = ComicsDatabase(cmd_args.comics_database_dir)
+comics_database = cmd_args.get_comics_database()
 
 comics_database.make_all_fantagraphics_directories()
