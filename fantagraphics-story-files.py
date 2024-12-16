@@ -7,7 +7,7 @@ from barks_fantagraphics.comics_utils import setup_logging
 
 setup_logging(logging.INFO)
 
-cmd_args = CmdArgs("Fantagraphics source files", CmdArgNames.VOLUME)
+cmd_args = CmdArgs("Fantagraphics source files", CmdArgNames.TITLE | CmdArgNames.VOLUME)
 args_ok, error_msg = cmd_args.args_are_valid()
 if not args_ok:
     logging.error(error_msg)
