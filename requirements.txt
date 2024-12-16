@@ -1,2 +1,1 @@
--e git+https://github.com/glk1001/barks-fantagraphics.git@d2fbbe045034ce6dc44768fb43b73f89edb80e6e#egg=barks_fantagraphics
 intspan==1.6.1
