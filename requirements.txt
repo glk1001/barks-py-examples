@@ -1,1 +1,5 @@
+-e git+https://github.com/glk1001/barks-fantagraphics.git@17e3ec37342bc42aca17681458228ea5eb6b3f10#egg=barks_fantagraphics
 intspan==1.6.1
+numpy==2.2.0
+opencv-python==4.10.0.84
+pillow==11.0.0
