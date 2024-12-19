@@ -5,13 +5,13 @@ from barks_fantagraphics.comic_book import get_jpg_page_list
 from barks_fantagraphics.comics_cmd_args import CmdArgs, CmdArgNames
 from barks_fantagraphics.comics_utils import setup_logging
 
-setup_logging(logging.INFO)
-
 cmd_args = CmdArgs("Fantagraphics volume page counts", CmdArgNames.VOLUME)
 args_ok, error_msg = cmd_args.args_are_valid()
 if not args_ok:
     logging.error(error_msg)
     sys.exit(1)
+
+setup_logging(cmd_args.get_log_level())
 
 comics_database = cmd_args.get_comics_database()
 
