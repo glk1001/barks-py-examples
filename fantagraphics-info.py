@@ -26,12 +26,29 @@ def is_restored(comic: ComicBook):
     return all_files_exist(comic.get_srce_restored_story_files(RESTORABLE_PAGE_TYPES))
 
 
+def has_fixes(comic: ComicBook):
+    mods = [f[1] for f in comic.get_srce_with_fixes_story_files(RESTORABLE_PAGE_TYPES)]
+    if any(mods):
+        return True
+
+    mods = [f[1] for f in comic.get_final_srce_upscayled_story_files(RESTORABLE_PAGE_TYPES)]
+    return any(mods)
+
+
 def all_files_exist(file_list: List[str]) -> bool:
     for file in file_list:
-        if not os.path.isfile((file)):
+        if not os.path.isfile(file):
             return False
     return True
 
+
+def get_restored_or_upscayled_flag(comic: ComicBook) -> str:
+    flag = " "
+    if is_restored(comic_book):
+        flag = "R"
+    elif is_upscayled(comic_book):
+        flag = "U"
+    return flag
 
 cmd_args = CmdArgs("Fantagraphics info", CmdArgNames.VOLUME)
 args_ok, error_msg = cmd_args.args_are_valid()
@@ -51,11 +68,11 @@ max_issue_title_len = max([len(issue_title) for issue_title in issue_titles])
 
 for title, issue_title in zip(titles, issue_titles):
     comic_book = comics_database.get_comic_book(title)
-    restored = "R" if is_restored(comic_book) else " "
-    upscayled = "U" if is_upscayled(comic_book) else " "
+
+    fixes_flag = "F" if has_fixes(comic_book) else " "
 
     print(
         f'Title: "{title:<{max_title_len}}", {issue_title:<{max_issue_title_len}},'
-        f" {restored} {upscayled},"
+        f" {fixes_flag} {get_restored_or_upscayled_flag(comic_book)},"
         f' jpgs: {", ".join(get_abbrev_jpg_page_list(comic_book))}'
     )
